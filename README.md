@@ -1,17 +1,21 @@
-# Simple Sanitizer
+# Simple Redact
 
-A library to (partially) sanitize or modify single values or
-objects.
+A library to (partially) redact values with typesafety and
+zero dependencies.
 
 Sample:
 
 ```typescript
+import { redact } from 'simple-redact'
+
 const originalLog = {
   name: "Alice",
   action: "add ToDo"
 }
 
-const auditLog = sanitizeValue(originalLog, {
+// Redact `name` from the log. `name` will
+// be redacted by only printing the first and last character
+const auditLog = redact(originalLog, {
   name: (name) => {
     if(name.length > 3) {
       const firstChar = name.charAt(0)
@@ -37,26 +41,49 @@ Will now return
 }
 ```
 
-It tries to be as simple as possible.
+It tries to be as simple as possible. The redact function takes the original
+object or value and a sanitizer object.
+
+This works as following:
+
+```typescript
+type Log = {
+    action: string;
+    name: string;
+    tags: string[];
+}
+
+type S = Sanitizer<Log>
+// S will resolve to the type
+//
+// S = {
+//     action?: (originalValue: string) => string;
+//     name?: (originalValue: string) => string;
+//     tags?: (originalTag: string) => string;
+// } | (originalObject: Log) => Log
+//
+// To redact the complet object, or only individual fields
+```
 
 ## Usage
 
-In order to sanitize an object, you need a sanitizer object. This needs the
-same attributes with functions as values that perform the desired redaction.
+In order to redact an object, you need a sanitizer. This is either a function
+retrieving the original value and returning a redacted version of it, or an
+object to only redact individual attributes of the original object.
 
 ### Single value examples
 
 Change a string to `[REDACTED]` 
 
 ```typescript
-sanitizeValue("Hello World", () => '[REDACTED]'
+redact("Hello World", () => '[REDACTED]'
 // Result: "[REDACTED]"
 ```
 
 Only print the first letter of the string, redact the rest
 
 ```typescript
-sanitizeValue("Hello World", (original) => `${original.substring(0, 1)}...`)
+redact("Hello World", (original) => `${original.substring(0, 1)}...`)
 // Result: "H..."
 ```
 
@@ -65,13 +92,13 @@ sanitizeValue("Hello World", (original) => `${original.substring(0, 1)}...`)
 If the input is an array, the sanitizer function is called for each item.
 
 ```typescript
-sanitizeValue(["Alice", "Bob"], (original) => `${original.substring(0, 1)}...`)
+redact(["Alice", "Bob"], (original) => `${original.substring(0, 1)}...`)
 // Result: ["A...", "B..."]
 ```
 
 ### Object example
 
-If you want to redact a nested object, you can provide a sanitizer which follows
+If you want to redact an object, you can provide a sanitizer which follows
 the same attributes. Let's take the following example:
 
 ```typescript

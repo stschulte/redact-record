@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { sanitizeValue } from '../src/index.js';
+import { redact } from '../src/index.js';
 
 type Foo = {
   friends: Array<{
@@ -13,20 +13,20 @@ type Foo = {
   };
 };
 
-describe('sanitizeValue', () => {
+describe('redact', () => {
   describe('when value is a string', () => {
     const input: string = 'Hello World';
 
     it('returns the string when no sanitizer provided', () => {
-      expect(sanitizeValue(input)).toBe(input);
+      expect(redact(input)).toBe(input);
     });
 
     it('redacts a string', () => {
-      expect(sanitizeValue(input, () => '[REDACTED]')).toBe('[REDACTED]');
+      expect(redact(input, () => '[REDACTED]')).toBe('[REDACTED]');
     });
 
     it('changes a string', () => {
-      expect(sanitizeValue(input, value => `${value.substring(0, 4)}X`)).toBe('HellX');
+      expect(redact(input, value => `${value.substring(0, 4)}X`)).toBe('HellX');
     });
   });
 
@@ -34,15 +34,15 @@ describe('sanitizeValue', () => {
     const input: number = 14;
 
     it('returns the number when no sanitizer provided', () => {
-      expect(sanitizeValue(input)).toBe(input);
+      expect(redact(input)).toBe(input);
     });
 
     it('redacts a number', () => {
-      expect(sanitizeValue(input, () => 0)).toBe(0);
+      expect(redact(input, () => 0)).toBe(0);
     });
 
     it('changes a number', () => {
-      expect(sanitizeValue(input, value => value * 2)).toBe(28);
+      expect(redact(input, value => value * 2)).toBe(28);
     });
   });
 
@@ -50,11 +50,11 @@ describe('sanitizeValue', () => {
     const input: string[] = ['Alice', 'Bob'];
 
     it('returns the input when no sanitizier provided', () => {
-      expect(sanitizeValue(input)).toBe(input);
+      expect(redact(input)).toBe(input);
     });
 
     it('sanitizes each value', () => {
-      expect(sanitizeValue(input, value => value.toUpperCase())).toStrictEqual(['ALICE', 'BOB']);
+      expect(redact(input, value => value.toUpperCase())).toStrictEqual(['ALICE', 'BOB']);
     });
   });
 
@@ -65,7 +65,7 @@ describe('sanitizeValue', () => {
         name: 'Alice',
       };
 
-      expect(sanitizeValue(input)).toBe(input);
+      expect(redact(input)).toBe(input);
     });
 
     it('redacts the complete object', () => {
@@ -74,7 +74,7 @@ describe('sanitizeValue', () => {
         name: 'Alice',
       };
 
-      expect(sanitizeValue(input, value => ({ age: 0, name: value.name.toUpperCase() }))).toStrictEqual({ age: 0, name: 'ALICE' });
+      expect(redact(input, value => ({ age: 0, name: value.name.toUpperCase() }))).toStrictEqual({ age: 0, name: 'ALICE' });
     });
 
     it('redacts single attributes', () => {
@@ -83,7 +83,7 @@ describe('sanitizeValue', () => {
         name: 'Alice',
       };
 
-      expect(sanitizeValue(input, { age: age => age * 2 })).toStrictEqual({ age: 44, name: 'Alice' });
+      expect(redact(input, { age: age => age * 2 })).toStrictEqual({ age: 44, name: 'Alice' });
     });
 
     it('works with nested fields', () => {
@@ -104,7 +104,7 @@ describe('sanitizeValue', () => {
         },
       };
 
-      const result = sanitizeValue(input, {
+      const result = redact(input, {
         friends: {
           name: name => (name.substring(0, 1)),
           status: () => 'unknown' as const,
@@ -138,7 +138,7 @@ describe('sanitizeValue', () => {
         name: 'Alice',
       };
 
-      const auditLog = sanitizeValue(originalLog, {
+      const auditLog = redact(originalLog, {
         name: (name) => {
           if (name.length > 3) {
             const firstChar = name.charAt(0);
