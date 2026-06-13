@@ -157,5 +157,11 @@ describe('redact', () => {
         name: 'A···e',
       });
     });
+
+    it('does not redact null values', () => {
+      const input = null as unknown as { foo: string };
+      const result = redact(input, { foo: () => 'REDACTED' });
+      expect(result).toBeNull();
+    });
   });
 });
