@@ -1,6 +1,6 @@
 {
   "name": "redact-record",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Redact or modify values of an object",
   "type": "module",
   "module": "./dist/index.js",
