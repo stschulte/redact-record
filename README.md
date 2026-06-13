@@ -1,5 +1,9 @@
 # Redact Record
 
+[![CI Status](https://github.com/stschulte/redact-record/workflows/CI/badge.svg)](https://github.com/stschulte/redact-record/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/stschulte/redact-record/graph/badge.svg?token=SQNERLCCC6)](https://codecov.io/gh/stschulte/redact-record)
+[![npm version](https://badge.fury.io/js/redact-record.svg)](https://badge.fury.io/js/redact-record)
+
 A library to (partially) redact values with typesafety and
 zero dependencies. Allows redaction in nested objects.
 
