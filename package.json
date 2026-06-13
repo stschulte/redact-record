@@ -1,5 +1,5 @@
 {
-  "name": "simple-redact",
+  "name": "redact-record",
   "version": "0.0.1",
   "description": "Redact or modify values of an object",
   "type": "module",
@@ -28,25 +28,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stschulte/simple-redact.git"
+    "url": "git+https://github.com/stschulte/redact-record.git"
   },
   "author": "Stefan Schulte <stschulte@posteo.de>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stschulte/simple-redact/issues"
+    "url": "https://github.com/stschulte/redact-record/issues"
   },
-  "homepage": "https://github.com/stschulte/simple-redact#readme",
+  "homepage": "https://github.com/stschulte/redact-record#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "@types/node": "^25.8.0",
-    "@vitest/coverage-v8": "^4.1.6",
-    "@vitest/eslint-plugin": "^1.6.17",
-    "eslint": "^10.4.0",
+    "@types/node": "^25.9.3",
+    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/eslint-plugin": "^1.6.20",
+    "eslint": "^10.5.0",
     "eslint-config-flat-gitignore": "^2.3.0",
     "eslint-plugin-perfectionist": "^5.9.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.3",
-    "vitest": "^4.1.6"
+    "typescript-eslint": "^8.61.0",
+    "vitest": "^4.1.8"
   }
 }

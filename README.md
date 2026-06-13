@@ -1,20 +1,23 @@
-# Simple Redact
+# Redact Record
 
 A library to (partially) redact values with typesafety and
-zero dependencies.
+zero dependencies. Allows redaction in nested objects.
+
+Install
 
 Sample:
 
 ```typescript
-import { redact } from 'simple-redact'
+import { redact } from 'redact-record'
 
 const originalLog = {
   name: "Alice",
   action: "add ToDo"
 }
 
-// Redact `name` from the log. `name` will
+// Redact `name` of the object. `name` will
 // be redacted by only printing the first and last character
+// other attributes will stay the same
 const auditLog = redact(originalLog, {
   name: (name) => {
     if(name.length > 3) {
@@ -44,15 +47,17 @@ Will now return
 It tries to be as simple as possible. The redact function takes the original
 object or value and a sanitizer object.
 
-This works as following:
+The sanitizer works as following:
 
 ```typescript
+// Assume the objects you want to redact are of type Log
 type Log = {
     action: string;
     name: string;
     tags: string[];
 }
 
+// The sanitizer object type can be created as follows
 type S = Sanitizer<Log>
 // S will resolve to the type
 //
@@ -64,6 +69,8 @@ type S = Sanitizer<Log>
 //
 // To redact the complet object, or only individual fields
 ```
+
+## Installation
 
 ## Usage
 
